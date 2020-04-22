@@ -9188,7 +9188,7 @@ function getPDF() {
 		    var code = Math.random().toString(36).substring(2, 2) + Math.random().toString(36).substring(2, 10);
 		    doc.deletePage(doc.internal.getNumberOfPages());
 			var filename = document.getElementById('titre').value + "_" + code + ".pdf";
-            doc.save(filename);
+            doc.dataurlnewwindow(filename);
 			document.getElementById("ipdf_form").reset();
         }
         $.when($.ajax(fuction1())).then(function() {

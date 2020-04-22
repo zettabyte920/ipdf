@@ -1,0 +1,187 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+   <head>
+      <!-- Required meta tags -->
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+      <link rel="stylesheet" href="https://cdn.metroui.org.ua/v4.3.2/css/metro-all.min.css">
+   </head>
+   <body>
+      <aside class="sidebar pos-absolute z-2" data-role="sidebar" data-toggle="#sidebar-toggle" id="sb1">
+         <div class="sidebar-header" data-image="images/sb-bg-1.jpg">
+            <a href="/" class="fg-white sub-action" onclick="Metro.sidebar.close('#sb1'); return false;"><span class="mif-arrow-left mif-2x"></span></a>
+            <div class="avatar">
+               <img src="images/727399.svg">
+            </div>
+            <span class="title fg-white">Guest</span>
+            <span class="subtitle fg-white">makech msajel !</span>
+         </div>
+         <ul class="sidebar-menu">
+            <li><a onclick="createInfoBox('alert')"><span class="mif-home icon"></span>Home</a></li>
+            <li><a onclick="createInfoBox('alert')"><span class="mif-cloud-download icon"></span>My cloud</a></li>
+            <li><a onclick="createInfoBox('alert')"><span class="mif-files-empty icon"></span>Examples</a></li>
+            <li class="divider"></li>
+            <li><a onclick="createInfoBox('alert')"><span class="mif-images icon"></span>Icons</a></li>
+         </ul>
+      </aside>
+      <div class="aaa h-100 p-ab">
+         <div class="app-bar pos-absolute bg-red z-1" data-role="appbar" id="app-bar-1">
+            <button class="app-bar-item c-pointer" id="sidebar-toggle"><span class="mif-menu fg-white"></span></button>
+            <div class='text-center'> <img src="./images/logo4.png" style="width: 100px;"> </div>
+         </div>
+         <div class="h-100 p-4">
+            <h1>Ahla, bikom!</h1>
+            <h5><small>slm inzel cader w a5tar les images li t7eb trodhom pdf </small></h5>
+            <h6><small>(kol taswira bech tji fi page wa7adha!)</small></h6>
+            <br>
+            <form id="ipdf_form" action="./api.php" method="post" enctype="multipart/form-data">
+               <input type="file" name="fileField[]" id="fileField" accept="image/*" multiple="multiple" data-role="file" data-mode="drop">
+               <div class="form-group">
+                  <label>Titre</label>
+                  <input type="email" id="titre" name="titre" data-role="input" data-append="<span class='mif-file-pdf'></span>" placeholder="7ot il titre lina"/>
+                  <small class="text-muted">li bech t7otou fil titre houwa zeda isem fichier bech ijik!</small>
+               </div>
+               <br>
+               <div class="row">
+                  <div class="cell-md-6">
+                     <button style="width:100%;" type="button" name="bsubmit" onclick="getPDF()" id="bsubmit" class="button alert rounded drop-shadow" >Telecharger  <span class="mif-download icon"></span></button>
+                  </div>
+                  <div class="cell-md-6">
+                     <button style="width:100%;" type="button" name="bsubmit" id="bsubmit" class="button alert rounded drop-shadow" disabled>View  <span class="mif-eye icon"></span></button>
+                  </div>
+               </div>
+            </form>
+         </div>
+      </div>
+      <script src="https://cdn.metroui.org.ua/v4.3.6/js/metro.min.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.0/jquery.min.js" integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+      <script src="https://rawgit.com/MrRio/jsPDF/master/dist/jspdf.min.js"></script>
+      <script>
+(function(api, $) {
+    'use strict';
+    api.writeText = function(x, y, text, options) {
+        options = options || {};
+
+        var defaults = {
+            align: 'left',
+            width: this.internal.pageSize.width
+        }
+
+        var settings = $.extend({}, defaults, options);
+
+        // Get current font size
+        var fontSize = this.internal.getFontSize();
+
+        // Get the actual text's width
+        /* You multiply the unit width of your string by your font size and divide
+         * by the internal scale factor. The division is necessary
+         * for the case where you use units other than 'pt' in the constructor
+         * of jsPDF.
+         */
+        var txtWidth = this.getStringUnitWidth(text) * fontSize / this.internal.scaleFactor;
+
+        if (settings.align === 'center')
+            x += (settings.width - txtWidth) / 2;
+        else if (settings.align === 'right')
+            x += (settings.width - txtWidth);
+
+        //default is 'left' alignment
+        this.text(text, x, y);
+
+    }
+
+})(jsPDF.API, jQuery);
+var disabled = true;
+document.getElementById('fileField').onchange = function() {
+    if (disabled) {
+        document.getElementById('bsubmit').removeAttribute('disabled');
+        disabled = !disabled;
+    }
+};
+
+function createInfoBox(t) {
+    if (t === undefined) {
+        t = "";
+    }
+
+    var html_content =
+        "<h3>Ahla bik</h3>" +
+        "<p>mizelna 9a3din ne5dmou fil site 3ala 9rib yekmel nshalah. tawika tnajem kan t7awel tsawer mta3ek il pdf</p>";
+
+    Metro.infobox.create(
+        html_content,
+        t
+    );
+}
+if (window.location.hash == "#error") {
+    createInfoBox('alert');
+}
+
+var today = new Date();
+var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
+var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+var dateTime = date + ' ' + time;
+var imgData = "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAVQAAAB7CAMAAAAcwYjQAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAADAFBMVEXONSzQPTTedW/ppqLzzcv55uX99fX++fnvvLnaZV7TS0Pqqab99vb////11dPddG7ONi3iiIP119XZY1zrrqv//f3lko7//v7PNy7RQTjml5PnmpbmmpXTSkL9+fj009H44uH66un22tjih4HPOC/kj4rkj4rih4L55eT33dvQPjXhg37ZYVr77u7nnpnon5v66unVUEjfe3XnnJjUTkbaaGLts7D67Ovzz83TSkLQPzf00tD45OPUTETdcmzzzMnhg33yycfPOTD88vL88fDPOjHVVEzbbGXggHveeHLQPzbYYFnSRj7ut7T119b+/Pz+/f3po5/WVk/YXVbZZF3SRT3UTkbcbmjaZV7RQjnSRDzeeHLQOzPgfnjrrKjTSEDONy756OfyysjuuLX339788/PccGn11NLkko3YXVX89PPffHbkkIvwwb7VUUnffHbUTUX99fT55uXrranvvLned3HqqKT44uD78O/ppaHXXFXkkYzmlpLnm5fxxsPVU0vTSUHwwr/xx8Tssq/onprmmZTllZDccGrWVU7cb2jlk47ji4XffXfaaGHllpHihoDYXlf22NbhhH/88vHRQjrppKDxxMH22dfttrP99/fWVU3UT0fjioXssa344N/++vr55+bQPDPaZl/9+PjttbL00M7dc23fenTfeXPXWVHhhYDXWlPRQDjssKz44+Lqp6PVUkrbaWP66+rcbWfSRz/229n77u3zzszbamPdcWvSRj3uurfrrarpop7ggXvXWVL229riiYTkjonssa7xxcPooJzww8D3393WV1DooZ3gf3raZ2D++/vzz83VUkvuu7jwwL3uuLXrq6fvvrvjjIfzzMrmmJP44eDyyMXbbGboop3ba2T00c/77+7WWFDddG377ezttbHvv7zyy8jnnZjvvbr66ej11tTjjYjxxMLgf3nppaHuubbji4bllI/XW1TZYlvttLDqqqbyyMb33tzRQzvwwL7POzLednDYX1j33NvqqaXhgnzsr6vZYVr009FqgDtqAAAAAWJLR0QN9rRh9QAAAAlvRkZzAAAAAQAA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";
+
+function getPDF() {
+
+
+
+
+    if (document.querySelector('#fileField').files[0]) {
+        var filesAmount = document.querySelector('#fileField').files.length
+        var doc = new jsPDF()
+        doc.rect(79.5, 3.5, 50, 10);
+        doc.writeText(0, 10, document.getElementById('titre').value, {
+            align: 'center'
+        });
+        doc.writeText(-5, 10, dateTime, {
+            align: 'right'
+        });
+
+        doc.addImage(imgData, 'JPEG', 5, 4, 35, 10);
+        doc.link(5, 4, 35, 10, {
+            url: 'https://www.google.com/'
+        });
+         var w=0;
+		 var h=20;
+		 var x=210;
+		 var y=277;
+        function fuction1() {
+
+
+            for (i = 0; i < filesAmount; i++) {
+                var reader = new FileReader();
+
+                reader.onload = function(event) {
+                    doc.addImage(event.target.result, event.target.result.split(';')[0].split('/')[1], w, h, x, y);
+					h=0;
+					y=297;
+					doc.addPage();
+                };
+
+                reader.readAsDataURL(document.querySelector('#fileField').files[i]);
+            }
+        }
+
+        function fuction2() {
+		    var code = Math.random().toString(36).substring(2, 2) + Math.random().toString(36).substring(2, 10);
+		    doc.deletePage(doc.internal.getNumberOfPages());
+			var filename = document.getElementById('titre').value + "_" + code + ".pdf";
+            doc.save(filename);
+			document.getElementById("ipdf_form").reset();
+        }
+        $.when($.ajax(fuction1())).then(function() {
+
+            fuction2();
+
+        });
+
+
+    }
+
+
+}
+</script>	  
+   </body>
+</html>
